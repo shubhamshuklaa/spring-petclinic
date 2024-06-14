@@ -20,10 +20,9 @@ pipeline {
 
         stage('maven build artifact') {
             steps {
-              // jf 'mvn-config --petclinic_artifact-libs-release --petclinic_artifact-libs-snapshot --petclinic_artifact-libs-release-local --petclinic_artifact-libs-snapshot-local'
-
-
-                 sh 'mvn clean package -DskipTests=true '  // Correct capitalization for -DskipTests
+                 withMaven(maven: 'maven'){
+                 sh 'mvn clean package -DskipTests=true -Dcheckstyle.skip'  // Correct capitalization for -DskipTests
+                 }
             }
         }
     }
