@@ -1,9 +1,6 @@
 pipeline {
   agent any
 
-
-   }
-
   stages {
     stage('snyk scan') {
       steps {
@@ -26,6 +23,7 @@ pipeline {
       }
     }
   }
+  )
 
 
     
