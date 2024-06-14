@@ -1,8 +1,7 @@
 pipeline {
   agent any
 
-   tools{
-     jfrog 'jfrog-cli'
+
    }
 
   stages {
@@ -22,21 +21,12 @@ pipeline {
       steps {
         echo 'BUILDING ARTIFACTS'
 
-        sh 'mvn clean package -DskipTests-true -Dcheckstyle.skip -fn' //It will create jar file and DskipTests is used to skip all the test, Dcheckstyle used to skip all the issues to ignore the build failures
+        sh 'mvn clean package -DskipTests-true -Dcheckstyle.skip' //It will create jar file and DskipTests is used to skip all the test, Dcheckstyle used to skip all the issues to ignore the build failures
+        archive 'target/*.jar'
       }
     }
+  }
 
-    stage('Trivy Scan') {
-      steps {
-        echo 'TRIVY SCANNING'
-        SH 'trivy fs . > trivyfs.txt'
-      }
-    }
-
-
-  stage('Building a docker image') {
-    steps {
-      sh 'docker build -t
 
     
     
