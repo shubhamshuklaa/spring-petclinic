@@ -1,33 +1,33 @@
 pipeline {
-  agent any
-
-  stages {
-    stage('snyk scan') {
-      steps {
-        echo 'SCANNING'
-        snykSecurity(
-          snykInstallation: 'snyk@latest',
-          snykTokenId: 'snyk_api_token',
-          monitorProjectOnBuild: false,
-          failOnIssues: false
-          additionalArguments: '--json-file-output=all-vulnerabilities.json'
-          )
-         
+    agent any
+  
+      tools {
+        jfrog 'jfrog-cli'
       }
-    }
 
-    stage('maven build artifact') {
-      steps {
-        withMaven(maven: 'maven'){
-        echo 'BUILDING ARTIFACTS'
-        sh 'mvn clean package -DskipTests-true -Dcheckstyle.skip' //It will create jar file and DskipTests is used to skip all the test, Dcheckstyle used to skip all the issues to ignore the build failures
-        archive 'target/*.jar'
+    stages {
+        stage('snyk scan') {
+            steps {
+                snykSecurity(
+                    snykInstallation: 'snyk@latest',
+                    snykTokenId: 'snyk_api_token',
+                    monitorProjectOnBuild: false,
+                    failOnIssues: false,  // Use boolean for failOnIssues
+                    additionalArguments: '--json-file-output=all-vulnerabilities.json'
+                )
+            }
         }
-      }
-    }
-  }
-}
 
+        stage('maven build artifact') {
+            steps {
+              // jf 'mvn-config --petclinic_artifact-libs-release --petclinic_artifact-libs-snapshot --petclinic_artifact-libs-release-local --petclinic_artifact-libs-snapshot-local'
+
+
+                 sh 'mvn clean package -DskipTests=true '  // Correct capitalization for -DskipTests
+            }
+        }
+    }
+}
 
     
     
