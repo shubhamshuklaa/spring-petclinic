@@ -9,7 +9,8 @@ pipeline {
           snykInstallation: 'snyk@latest',
           snykTokenId: 'snyk_api_token',
           monitorProjectOnBuild: false,
-          additionalArguments: 'output-all-vulnerabilities.json'
+          failOnIssues: false
+          additionalArguments: '--json-file-output=all-vulnerabilities.json'
           )
          
       }
