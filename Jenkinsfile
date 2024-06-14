@@ -22,6 +22,7 @@ pipeline {
             steps {
                  withMaven(maven: 'maven'){
                  sh 'mvn clean package -DskipTests=true -Dcheckstyle.skip'  // Correct capitalization for -DskipTests
+                 archive 'target/*.jar'
                  }
             }
         }
