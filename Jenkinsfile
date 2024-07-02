@@ -35,7 +35,18 @@ pipeline {
 
         stage('BUILDING DOCKER IMAGE') {
             steps {
-                sh "docker build -t 
+                sh "docker build -t petclinicimage . "
+            }
+        }
+
+        stage('IMAGE SCANNING') {
+            steps {
+                sh 'trivy image petclinicimage --scanners vuln > trivyimage.txt'
+            }
+        }
+
+        stage('docker image push') {
+            
                 
 
         
