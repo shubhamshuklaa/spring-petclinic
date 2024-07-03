@@ -49,7 +49,7 @@ pipeline {
 
         stage('docker image push') {
             steps {
-                withDockerRegistry(credentialsId: 'docker-cred') {
+                withDockerRegistry(credentialsId: 'docker-cred', url: '') {
                     sh 'docker push shubham021095/petclinicapp:${BUILD_NUMBER}'
                 }
             }
