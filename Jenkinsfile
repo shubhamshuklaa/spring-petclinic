@@ -20,6 +20,8 @@ pipeline {
 
         stage('maven build artifact') {
             steps {
+                jf 'mvn-config --repo-resolve-releases petclinic-libs-release --repo-resolve-snapshots petclinic-libs-snapshot --repo-deploy-releases petclinic-libs-release-local --repo-deploy-snapshots petclinic-libs-snapshot-local'
+                
                  withMaven(maven: 'maven'){
                  sh 'mvn clean package -DskipTests=true -Dcheckstyle.skip'  // Correct capitalization for -DskipTests
                  archive 'target/*.jar'
@@ -35,17 +37,35 @@ pipeline {
 
         stage('BUILDING DOCKER IMAGE') {
             steps {
-                sh "docker build -t petclinicimage . "
+                sh "docker build -t shubham021095/petclinicapp:${BUILD_NUMBER} . "
             }
         }
 
         stage('IMAGE SCANNING') {
             steps {
-                sh 'trivy image petclinicimage --scanners vuln > trivyimage.txt'
+                sh 'trivy image shubham021095/petclinicapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt'
             }
         }
 
         stage('docker image push') {
+            steps {
+                withDockerRegistry(credentialsId: 'docker-cred') {
+                    sh 'docker push shubham021095/petclinicapp:${BUILD_NUMBER}'
+                }
+            }
+        }
+        
+        stage('Publish Build Info') {
+            steps {
+                jf 'rt build-publish'
+            }
+        }
+        
+        stage('Pushing the Artifacts') {
+            steps {
+                jf 'rt u /var/lib/jenkins/workspace/Stage-2/artifacts/spring-petclinic-3.3.0-SNAPSHOT.jar petclinic-libs-snapshot-local'
+            }
+        }
             
                 
 
@@ -53,6 +73,8 @@ pipeline {
     }
 }
 
+    
+    
     
     
   
