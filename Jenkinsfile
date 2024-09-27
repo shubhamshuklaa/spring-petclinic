@@ -20,11 +20,11 @@ pipeline {
 
         stage('maven build artifact and sonarqube analysis') {
             steps {
-               jf 'mvn-config --petclinic_artifact-libs-release --petclinic_artifact-libs-snapshot --petclinic_artifact-libs-release-local --petclinic_artifact-libs-snapshot-local'
+               jf 'mvn-config --repo-resolve-releases maven-remote-libs-release --repo-resolve-snapshot maven-remote-libs-snapshot --repo-deploy-releases maven-remote-libs-release-local --repo-deploy-snapshot maven-remote-libs-snapshot-local'
                    
-            
-               sh 'mvn clean package -DskipTests=true '  // Correct capitalization for -DskipTests
-                
+            withSonarQubeEnv('SONARQUBE') {
+               sh 'mvn clean package sonar:sonar -DskipTests=true '  // Correct capitalization for -DskipTests
+                   }
                  } 
                  
             }
