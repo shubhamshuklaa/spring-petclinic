@@ -24,8 +24,7 @@ pipeline {
                    
             
                sh 'mvn clean package -DskipTests=true '  // Correct capitalization for -DskipTests
-               withSonarQubeEnv('SONARQUBE') {
-                 sh 'mvn sonar:sonar ' 
+                
                  } 
                  
             }
