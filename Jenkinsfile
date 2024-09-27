@@ -20,7 +20,7 @@ pipeline {
 
         stage('maven build artifact and sonarqube analysis') {
             steps {
-               jf 'mvn-config --repo-resolve-releases maven-remote-libs-release --repo-resolve-snapshot maven-remote-libs-snapshot --repo-deploy-releases maven-remote-libs-release-local --repo-deploy-snapshot maven-remote-libs-snapshot-local'
+               jf 'mvn-config --repo-resolve-releases maven-remote-libs-release --repo-resolve-snapshots maven-remote-libs-snapshot --repo-deploy-releases maven-remote-libs-release-local --repo-deploy-snapshot maven-remote-libs-snapshot-local'
                    
             withSonarQubeEnv('SONARQUBE') {
                sh 'mvn clean package sonar:sonar -DskipTests=true '  // Correct capitalization for -DskipTests
