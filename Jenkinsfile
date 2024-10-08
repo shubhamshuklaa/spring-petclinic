@@ -15,24 +15,21 @@ pipeline {
             }
         }
 
-        stage('Build Artifact') {
+        stage('Build the code') {
             steps {
-              withMaven(maven: 'maven') {
-              sh "mvn clean package -DskipTests=true -Dcheckstyle.skip" 
-              archive 'target/*.jar'
-              }
+               sh "mvn clean package -DskipTests=true -Dcheckstyle.skip" 
+               
             }  
        }
 
        stage('Test Maven - JUnit') {
             steps {
-              withMaven(maven: 'maven') {
               sh "mvn test -Dcheckstyle.skip"
               }
             }
             post{
               always{
-                junit 'target/surefire-reports/*.xml'
+                junit testResults: 'target/surefire-reports/*.xml'
               }
             }
         }
