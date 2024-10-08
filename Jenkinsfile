@@ -1,9 +1,6 @@
 pipeline {
  agent any
   
-      tools {
-        jfrog 'jfrog-cli'
-      }
 
     stages {
         stage('snyk scan') {
