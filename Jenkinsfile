@@ -26,14 +26,14 @@ pipeline {
             steps {
               sh "mvn test -Dcheckstyle.skip"
               }
-            }
+            
             post{
               always{
                 junit testResults: 'target/surefire-reports/*.xml'
               }
             }
         }
-    
+    }
 
         
 
