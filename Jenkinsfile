@@ -18,27 +18,32 @@ pipeline {
             }
         }
 
-        stage('maven build artifact and sonarqube analysis') {
+        stage('Build Artifact') {
             steps {
-               jf 'mvn-config --repo-resolve-releases maven-libs-release --repo-resolve-snapshots maven-libs-snapshot --repo-deploy-releases maven-libs-release-local --repo-deploy-snapshots maven-libs-snapshot-local'
-                   
-            withSonarQubeEnv('sonar') {
-               sh 'mvn clean package sonar:sonar -DskipTests=true '  // Correct capitalization for -DskipTests
-                   }
-                 } 
-                 
+              withMaven(maven: 'maven') {
+              sh "mvn clean package -DskipTests=true -Dcheckstyle.skip" 
+              archive 'target/*.jar'
+              }
+            }  
+       }
+
+       stage('Test Maven - JUnit') {
+            steps {
+              withMaven(maven: 'maven') {
+              sh "mvn test -Dcheckstyle.skip"
+              }
             }
-        
-
-        
-
-       stage('TRIVY FS SCAN') {
-            steps {
-                sh "trivy fs . > trivyfs.txt"
+            post{
+              always{
+                junit 'target/surefire-reports/*.xml'
+              }
             }
         }
-     }
+        
 
+        
+
+       
 
 
 
