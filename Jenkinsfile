@@ -17,14 +17,14 @@ pipeline {
 
         stage('Build the code') {
             steps {
-               sh "/opt//opt/apache-maven-3.9.9/bin/mvn clean package -DskipTests=true -Dcheckstyle.skip" 
+               sh "/opt/apache-maven-3.9.9/bin/mvn clean package -DskipTests=true -Dcheckstyle.skip" 
                
             }  
        }
 
        stage('Test Maven - JUnit') {
             steps {
-              sh "/opt//opt/apache-maven-3.9.9/bin/mvn test -Dcheckstyle.skip"
+              sh "/opt/apache-maven-3.9.9/bin/mvn test -Dcheckstyle.skip"
               }
             
             post{
