@@ -15,9 +15,10 @@ pipeline {
             }
         }
 
-        stage('Build the code and Sonarqube Analysis') {
+        stage('Build the code artifact and Sonarqube Analysis') {
             steps {
                   withSonarQubeEnv ('SONAR_LATEST') {
+                    jf '/opt/apache-maven-3.9.9/bin/mvn-config --repo-resolve-releases maven-libs-release --repo-resolve-snapshots maven-libs-snapshot --repo-deploy-releases maven-libs-release-local --repo-deploy-snapshots maven-libs-snapshot-local'
                     sh '/opt/apache-maven-3.9.9/bin/mvn clean package sonar:sonar -DskipTests=true -Dcheckstyle.skip' 
                   }
             }  
