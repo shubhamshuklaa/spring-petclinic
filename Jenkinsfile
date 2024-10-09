@@ -39,7 +39,7 @@ pipeline {
             steps {
               withDockerRegistry(credentialsId: 'dockercred', url: '') {
               sh "docker build -t petclinic_img ."
-	             sh "docker tag petclinic_img:latest shubhamshuklaa/petclinicapp:petclinic_img" docker push shubhamshuklaa/petclinicapp
+	      sh "docker tag petclinic_img:latest shubhamshuklaa/petclinicapp:petclinic_img" 
               sh "docker push shubhamshuklaa/petclinicapp:petclinic_img"
                 sh "docker run -d -p 8080:8080 petclinic_img"
               }
