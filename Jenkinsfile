@@ -15,10 +15,11 @@ pipeline {
             }
         }
 
-        stage('Build the code') {
+        stage('Build the code and Sonarqube Analysis') {
             steps {
-               sh "/opt/apache-maven-3.9.9/bin/mvn clean package -DskipTests=true -Dcheckstyle.skip" 
-               
+                  withSonarQubeEnv ('SONAR_LATEST') {
+                    sh '/opt/apache-maven-3.9.9/bin/mvn clean package sonar:sonar -DskipTests=true -Dcheckstyle.skip' 
+                  }
             }  
        }
 
