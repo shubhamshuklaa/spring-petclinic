@@ -40,6 +40,11 @@ pipeline {
                 sh "trivy fs . > trivyfs.txt"
             }
         }
+         stage('building a docker image') {
+            steps {
+                sh "docker build -t shubhamshuklaa/petclinicapp:${BUILD_NUMBER} ."
+            }
+         }
 
     }
 
