@@ -45,6 +45,19 @@ pipeline {
                 sh "docker build -t shubhamshuklaa/petclinicapp:${BUILD_NUMBER} ."
             }
          }
+          stage("TRIVY"){
+            steps{
+                sh "trivy image  shubhamshuklaa/petclinicapp:${BUILD_NUMBER} --scanners vuln > trivyimage.txt" 
+            }
+        }
+
+        stage('docker image push') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockercred', url: '') {
+                    sh "docker push shubhamshuklaa/petclinicapp:${BUILD_NUMBER}"
+                }
+            }
+        }
 
     }
 
