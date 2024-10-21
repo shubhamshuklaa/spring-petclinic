@@ -54,6 +54,24 @@ pipeline {
          }
         }
 
+        stage('Publish Artifact') {
+         steps {
+          withMaven(globalMavenSettingsConfig:'settings-maven',jdk:", maven: 'maven', mavenSettingsConfig: ", traceability: true) {
+           sh 'mvn deploy -DskipTests=true -Dcheckstyle.skip'
+          }
+         }
+        }
+
+        stage('Docker Build & Tag') {
+         steps {
+          script {
+            withDockerRegistry(credentialsId: 'docker-cred' , toolName: 'docker') {
+              sh 'docker build -t shubhamshuklaa/petclinicapp:latest .'
+            }
+          }
+         }
+        }
+
           
 
     }
