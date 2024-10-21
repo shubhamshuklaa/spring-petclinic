@@ -36,7 +36,7 @@ pipeline {
 
         stage('Trivy FS Scan') {
          steps {
-          sh 'trivy fs --format table -o fs.html .'
+          sh 'sh "trivy fs . > trivyfs.txt"'
          }
         }
 
