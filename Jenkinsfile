@@ -1,6 +1,13 @@
 pipeline {
  agent any
-  
+
+ tools {
+      maven 'maven'
+ }
+
+ enviroment {
+     SCANNER_HOME= tool 'sonar-scanner'
+ }
 
     stages {
         stage('snyk scan') {
@@ -15,27 +22,39 @@ pipeline {
             }
         }
 
-        stage('Build the code artifact and Sonarqube Analysis') {
-            steps {
-                  withSonarQubeEnv ('SONAR_LATEST') {
-                
-                    sh '/opt/apache-maven-3.9.9/bin/mvn clean package sonar:sonar -DskipTests=true -Dcheckstyle.skip' 
-                  }
-            }  
-       }
-
-       stage('Test Maven - JUnit') {
-            steps {
-              sh "/opt/apache-maven-3.9.9/bin/mvn test -Dcheckstyle.skip"
-              }
-            
-            post{
-              always{
-                junit testResults: 'target/surefire-reports/*.xml'
-              }
-            }
+        stage('Compile') {
+         steps {
+          sh ' mvn compile'
+         }
         }
-    
+
+        stage('Unit-Test') {
+         steps {
+          sh 'mvn test'
+         }
+        }
+
+        stage('Trivy FS Scan') {
+         steps {
+          sh 'trivy fs --format table -o fs.html .'
+         }
+        }
+
+        stage('Sonar-Analysis') {
+         steps {
+          withSonarQubeEnv('sonar') {
+           sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=taskmaster -Dsonar.projectKey=taskmaster -Dsonar.java.binaries=target '''
+          }
+         }
+        }
+
+        stage('Build Application') {
+         steps {
+          sh 'mvn package'
+         }
+        }
+
+          
 
     }
 
