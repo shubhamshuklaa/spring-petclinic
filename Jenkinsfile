@@ -72,6 +72,22 @@ pipeline {
          }
         }
 
+        stage('Trivy Scan') {
+            steps {
+                    sh 'trivy image --format -o image.html shubhamshuklaa/petclinicapp:latest'
+            }
+        }
+
+        stage('Docker Push') {
+         steps {
+          script {
+           withDockerRegistry(credentialsId: 'docker-cred' , toolName: 'docker') {
+            sh 'docker push shubhamshuklaa/petclinicapp:latest'
+           }
+          }
+         }
+        }
+
           
 
     }
