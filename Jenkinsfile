@@ -5,7 +5,7 @@ pipeline {
       maven 'maven'
  }
 
- enviroment {
+ environment {
      SCANNER_HOME= tool 'sonar-scanner'
  }
 
