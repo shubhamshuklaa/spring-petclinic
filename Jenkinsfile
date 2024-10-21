@@ -57,7 +57,7 @@ pipeline {
         stage('Publish Artifact') {
          steps {
           withMaven(globalMavenSettingsConfig:'settings-maven',jdk:'', maven: 'maven', mavenSettingsConfig: '', traceability: true) {
-           sh 'mvn deploy -DskipTests=true -Dcheckstyle.skip'
+           sh 'mvn deploy'
           }
          }
         }
