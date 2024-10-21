@@ -74,7 +74,7 @@ pipeline {
 
         stage('Trivy Scan') {
             steps {
-                    sh 'trivy image --format table -o image.txt shubhamshuklaa/petclinicapp:latest'
+                    sh 'trivy image --format table -o image.txt --scanners vuln shubhamshuklaa/petclinicapp:latest'
             }
         }
 
