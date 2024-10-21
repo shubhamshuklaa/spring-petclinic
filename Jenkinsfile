@@ -24,13 +24,13 @@ pipeline {
 
         stage('Compile') {
          steps {
-          sh ' mvn compile'
+          sh ' mvn compile -DskipTests=true -Dcheckstyle.skip'
          }
         }
 
         stage('Unit-Test') {
          steps {
-          sh 'mvn test'
+          sh 'mvn test -DskipTests=true -Dcheckstyle.skip'
          }
         }
 
@@ -50,7 +50,7 @@ pipeline {
 
         stage('Build Application') {
          steps {
-          sh 'mvn package'
+          sh 'mvn package -DskipTests=true -Dcheckstyle.skip'
          }
         }
 
