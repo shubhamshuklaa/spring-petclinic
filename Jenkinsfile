@@ -50,15 +50,14 @@ pipeline {
 
         stage('Build Application') {
          steps {
+          jf 'mvn-config --repo-resolve-releases maven-libs-release --repo-resolve-snapshots maven-libs-snapshot --repo-deploy-releases maven-libs-release-local --repo-deploy-snapshots maven-libs-snapshot-local'
           sh 'mvn package -DskipTests=true -Dcheckstyle.skip'
          }
         }
 
         stage('Publish Artifact') {
          steps {
-          withMaven(globalMavenSettingsConfig:'settings-maven',jdk:'', maven: 'maven', mavenSettingsConfig: '', traceability: true) {
-           sh 'mvn deploy'
-          }
+            jf 'rt build-publish'
          }
         }
 
